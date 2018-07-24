@@ -1,0 +1,93 @@
+body > div,
+body > div > div,
+body > div > div > div.login-form
+body > div > div > div.connect-form {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.background {
+    position:fixed;
+    z-index:-1;
+    left:0;
+    top:0;
+    min-width:100vw;
+    min-height:100vh;
+}
+
+.connect-form {
+    background-color: rgb(34, 34, 34);
+}
+
+.overlay {
+    display: none;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+@keyframes anim {
+    0% {
+        background-color: rgba(34, 34, 34, 0.0);
+    }
+
+    100% {
+        background-color: rgba(34, 34, 34, 1.0);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateZ(359deg);
+    }
+}
+
+.loading-container {
+    position: absolute;
+    margin-left: 15px;
+}
+
+.loading-overlay.visible {
+    display: block;
+    background-color: rgba(34, 34, 34, 1.0);
+    animation: 900ms anim cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.loading-top, .loading-bottom {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.loading-text {
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    position: absolute;
+    width: 180px;
+    height: 20px;
+    color: white;
+    text-align: center;
+    bottom: 0;
+}
+
+.loading-top {
+    background-image: url("/unionloadingtop.png");
+}
+
+.loading-bottom {
+    background-image: url("/unionloadingbottom.png");
+    animation: 1500ms spin infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
