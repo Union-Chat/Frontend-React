@@ -1,6 +1,6 @@
 {
-  "files": [
-    "src/main.tsx"
+  "include": [
+    "src/**/*"
   ],
   "compilerOptions": {
     "target": "es6",
