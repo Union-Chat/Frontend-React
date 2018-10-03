@@ -1,4 +1,4 @@
-import { hello, presence } from './chat.handler'
+import { hello, memberAdd, memberLeave, messageCreate, presence, serverJoin, serverLeave } from './chat.handler'
 
 export default class ChatWebSocket {
 
@@ -32,15 +32,26 @@ export default class ChatWebSocket {
         hello(message.d, this.dispatcher)
         break
       case InOpCodes.MEMBER_ADD:
+        memberAdd(message.d, this.dispatcher)
+        break
       case InOpCodes.MESSAGE:
+        messageCreate(message.d, this.dispatcher)
+        break
       case InOpCodes.PRESENCE_UPDATE:
         presence(message.d, this.dispatcher)
         break
       case InOpCodes.SERVER_JOIN:
+        serverJoin(message.d, this.dispatcher)
+        break
       case InOpCodes.SERVER_LEAVE:
+        serverLeave(message.d, this.dispatcher)
+        break
       case InOpCodes.MEMBER_CHUNK:
       case InOpCodes.DELETE_MESSAGE:
+        break
       case InOpCodes.MEMBER_LEAVE:
+        memberLeave(message.d, this.dispatcher)
+        break
       default:
         console.warn('%c[union:websocket]', 'color: #257dd4', 'Received an invalid message!', message)
     }

@@ -1,9 +1,11 @@
-export const addMember = (member: string) => ({
+import { UnionStoreMember } from '../store.interface'
+
+export const addMember = (member: UnionStoreMember) => ({
   type: 'MEMBER_ADD',
   member
 })
 
-export const addMemberBatch = (members: string[]) => ({
+export const addMemberBatch = (members: UnionStoreMember[]) => ({
   type: 'MEMBER_ADD_BATCH',
   members
 })

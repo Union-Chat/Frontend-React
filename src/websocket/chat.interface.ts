@@ -13,7 +13,26 @@ export interface SocketMember {
   online: boolean
 }
 
+export interface SocketMemberAdd {
+  server: number
+  member: SocketMember
+}
+
+export interface SocketMessage {
+  id: string
+  server: number
+  content: string
+  author: string
+  createdAt: number
+}
+
 export interface SocketPresence {
   id: string
   status: boolean
+}
+
+export interface SocketMemberLeave {
+  user: string
+  server: number
+  kicked: boolean
 }
