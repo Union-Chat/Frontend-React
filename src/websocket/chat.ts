@@ -1,3 +1,5 @@
+import { hello, presence } from './chat.handler'
+
 export default class ChatWebSocket {
 
   ws: WebSocket
@@ -27,9 +29,13 @@ export default class ChatWebSocket {
     console.log('%c[union:websocket]', 'color: #257dd4', 'Message received', message)
     switch (message.op) {
       case InOpCodes.HELLO:
+        hello(message.d, this.dispatcher)
+        break
       case InOpCodes.MEMBER_ADD:
       case InOpCodes.MESSAGE:
       case InOpCodes.PRESENCE_UPDATE:
+        presence(message.d, this.dispatcher)
+        break
       case InOpCodes.SERVER_JOIN:
       case InOpCodes.SERVER_LEAVE:
       case InOpCodes.MEMBER_CHUNK:
@@ -69,5 +75,5 @@ export const InOpCodes = {
 }
 
 export const OutOpCodes = {
-  REQUEST_MEMBER_CHUNK: 7
+  REQUEST_MEMBER_CHUNK: 9
 }

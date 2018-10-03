@@ -12,3 +12,8 @@ export interface SocketMember {
   createdAt: number
   online: boolean
 }
+
+export interface SocketPresence {
+  id: string
+  status: boolean
+}
