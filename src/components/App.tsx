@@ -1,4 +1,5 @@
 import React from 'react'
+import { Switch } from 'react-router'
 import { hot } from 'react-hot-loader'
 
 import './App.scss'
