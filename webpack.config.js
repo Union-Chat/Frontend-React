@@ -86,15 +86,6 @@ let config = {
             name: `${dev ? '[name].[hash:4]' : '[hash]'}.[ext]`
           }
         }]
-      },
-      {
-        test: /\.ico$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]'
-          }
-        }]
       }
     ]
   },
@@ -102,6 +93,9 @@ let config = {
     quiet: true,
     historyApiFallback: {
       index: 'dist/index.html'
+    },
+    proxy: {
+      '/api': 'http://localhost:3010' // I run Union API on this port
     }
   },
   plugins: [
@@ -135,8 +129,7 @@ if (!dev) {
   config.plugins.push(new CleanWebpackPlugin([path.resolve(__dirname, 'dist')]))
   config.plugins.push(new webpack.optimize.OccurrenceOrderPlugin())
 } else {
-  config.entry = [config.entry, 'webpack-hot-middleware/client']
-  config.plugins.push(new webpack.HotModuleReplacementPlugin(), new FriendlyErrorsWebpackPlugin())
+  config.plugins.push(new FriendlyErrorsWebpackPlugin())
 }
 
 module.exports = config

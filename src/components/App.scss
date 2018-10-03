@@ -1,6 +1,7 @@
 @import './vars.scss';
 
 * { box-sizing: border-box; }
+
 html, body, #react-root, #app {
   padding: 0;
   margin: 0;
@@ -9,7 +10,4 @@ html, body, #react-root, #app {
   font-family: 'Roboto', sans-serif;
   background-color: $dark2;
   color: #fff;
-}
-
-#app {
 }

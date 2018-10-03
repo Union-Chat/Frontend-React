@@ -2,7 +2,7 @@
   "name": "union-react",
   "version": "0.1.0",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --watch",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --watch --port 3000 --hot",
     "prod": "cross-env NODE_ENV=production webpack"
   },
   "dependencies": {
