@@ -14,7 +14,7 @@ export default class ChatWebSocket {
     this.ws = new WebSocket(this.address)
 
     this.ws.addEventListener('open', () => this.authenticate())
-    this.ws.addEventListener('message', (m) => this.handleMessage(m))
+    this.ws.addEventListener('message', (m) => this.handleMessage(JSON.parse(m.data)))
     this.ws.addEventListener('close', (c) => this.handleDisconnect(c))
   }
 
@@ -23,8 +23,21 @@ export default class ChatWebSocket {
     this.ws.send('Basic ' + localStorage.getItem('token'))
   }
 
-  private handleMessage (message: MessageEvent) {
+  private handleMessage (message: { op: number, d: any }) {
     console.log('%c[union:websocket]', 'color: #257dd4', 'Message received', message)
+    switch (message.op) {
+      case InOpCodes.HELLO:
+      case InOpCodes.MEMBER_ADD:
+      case InOpCodes.MESSAGE:
+      case InOpCodes.PRESENCE_UPDATE:
+      case InOpCodes.SERVER_JOIN:
+      case InOpCodes.SERVER_LEAVE:
+      case InOpCodes.MEMBER_CHUNK:
+      case InOpCodes.DELETE_MESSAGE:
+      case InOpCodes.MEMBER_LEAVE:
+      default:
+        console.warn('%c[union:websocket]', 'color: #257dd4', 'Received an invalid message!', message)
+    }
   }
 
   private handleDisconnect (close: CloseEvent) {
@@ -41,4 +54,20 @@ export default class ChatWebSocket {
       // Clear token
     }
   }
+}
+
+export const InOpCodes = {
+  HELLO: 1,
+  MEMBER_ADD: 2,
+  MESSAGE: 3,
+  PRESENCE_UPDATE: 4,
+  SERVER_JOIN: 5,
+  SERVER_LEAVE: 6,
+  MEMBER_CHUNK: 7,
+  DELETE_MESSAGE: 8,
+  MEMBER_LEAVE: 10
+}
+
+export const OutOpCodes = {
+  REQUEST_MEMBER_CHUNK: 7
 }

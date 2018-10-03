@@ -1,4 +1,4 @@
-import { UnionStoreAPI } from '../store.i'
+import { UnionStoreAPI } from '../store.interface'
 
 export const fetchApiInfos = () => {
   return async (dispatch: any) => {

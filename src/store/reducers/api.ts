@@ -1,4 +1,4 @@
-import { ReduxAction, UnionStoreAPI } from '../store.i'
+import { ReduxAction, UnionStoreAPI } from '../store.interface'
 
 export default (state: UnionStoreAPI = null, action: ReduxAction) => {
   switch (action.type) {

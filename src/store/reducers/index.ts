@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import api from './api'
-import appState from './app_state'
+import appState from './appState'
 import servers from './servers'
 import members from './members'
 import messages from './messages'

@@ -1,4 +1,4 @@
-import { ReduxAction, UnionStoreMember } from '../store.i'
+import { ReduxAction, UnionStoreMember } from '../store.interface'
 
 export default (state: UnionStoreMember[] = [], action: ReduxAction) => {
   switch (action.type) {
