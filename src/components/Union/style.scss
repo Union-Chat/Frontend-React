@@ -1,0 +1,152 @@
+@import '../vars';
+
+.union {
+  height: 100%;
+  display: flex;
+
+  &-servers {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 70px;
+    background-color: $dark0;
+
+    &-server {
+      width: 50px;
+      height: 50px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+
+      img {
+        border-radius: 50%;
+        width: 100%;
+      }
+
+      &.selected img {
+        border-radius: 30%;
+      }
+    }
+
+    &-create {
+      position: relative;
+      cursor: pointer;
+      margin-top: 5px;
+      padding: 5px;
+      border-top: 1px #575757 solid;
+      width: 50px;
+      height: 50px;
+
+      img:nth-last-child(2) {
+        position: relative;
+      }
+
+      &:first-child {
+        border-color: transparent;
+      }
+
+      &-select {
+        cursor: initial;
+        display: flex;
+        width: 350px;
+        height: 50px;
+        background-color: $dark0;
+        top: 0;
+        align-items: center;
+        left: 60px;
+        position: absolute;
+
+        div {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+
+          span {
+            display: block;
+          }
+        }
+
+        div + div {
+          padding-left: 10px;
+          margin-left: 10px;
+
+          img {
+            width: 25px;
+            height: 25px;
+          }
+
+          &:before {
+            position: relative;
+            content: '';
+            display: block;
+            height: 25px;
+            left: -10px;
+            width: 1px;
+            background-color: #8e8e8e;
+          }
+        }
+
+        img {
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+        }
+      }
+    }
+
+    &-logo {
+      width: 50px;
+      height: 50px;
+      margin-top: auto;
+      margin-bottom: 15px;
+    }
+  }
+
+  &-container {
+    flex: 1 0 auto;
+    z-index: 1;
+    position: relative;
+  }
+
+  &-welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    &-content {
+      font-size: 22px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    &-contribute {
+      margin-top: 25px;
+      color: #fff;
+      display: block;
+      text-decoration: none;
+      height: 36px;
+      line-height: 36px;
+      padding: 0 15px;
+      font-size: 14px;
+      background-color: #292d32;
+    }
+  }
+}
+
+.server {
+  &-inner {
+    display: flex;
+  }
+}

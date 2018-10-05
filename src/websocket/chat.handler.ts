@@ -1,10 +1,10 @@
 import { SocketMemberAdd, SocketMemberLeave, SocketMessage, SocketPresence, SocketServer } from './chat.interface'
 import {
-  addServer, addServerBatch, addServerMember, addServerMessage, deleteServer,
+  addServer, addServerBatch, addServerMember, addServerMessage, deleteServer, purgeServers,
   removeServerMember
 } from '../store/actions/servers'
-import { addMember, addMemberBatch, updateMemberPresence } from '../store/actions/members'
-import { addMessage } from '../store/actions/messages'
+import { addMember, addMemberBatch, purgeMembers, updateMemberPresence } from '../store/actions/members'
+import { setConnectionHealth, setHello } from '../store/actions/appState'
 
 export const hello = (data: SocketServer[], dispatch: any) => {
   let servers = []
@@ -27,8 +27,12 @@ export const hello = (data: SocketServer[], dispatch: any) => {
     })
   })
 
+  dispatch(purgeServers())
+  dispatch(purgeMembers())
   dispatch(addServerBatch(servers))
   dispatch(addMemberBatch(members))
+  dispatch(setHello(true))
+  dispatch(setConnectionHealth(true))
 }
 
 export const memberAdd = (data: SocketMemberAdd, dispatch: any) => {
@@ -40,13 +44,12 @@ export const memberAdd = (data: SocketMemberAdd, dispatch: any) => {
 }
 
 export const messageCreate = (data: SocketMessage, dispatch: any) => {
-  dispatch(addMessage({
+  dispatch(addServerMessage(data.server, {
     id: data.id,
     author: data.author,
     content: data.content,
     createdAt: data.createdAt
   }))
-  dispatch(addServerMessage(data.server, data.id))
 }
 
 export const presence = (data: SocketPresence, dispatch: any) => {
@@ -54,6 +57,8 @@ export const presence = (data: SocketPresence, dispatch: any) => {
 }
 
 export const serverJoin = (data: SocketServer, dispatch: any) => {
+  let members = data.members.map(member => ({ name: member.id, online: member.online }))
+
   dispatch(addServer({
     id: data.id,
     name: data.name,
@@ -62,6 +67,7 @@ export const serverJoin = (data: SocketServer, dispatch: any) => {
     members: data.members.map(member => member.id),
     messages: []
   }))
+  dispatch(addMemberBatch(members))
 }
 
 export const serverLeave = (data: number, dispatch: any) => {

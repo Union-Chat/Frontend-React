@@ -3,6 +3,5 @@ import api from './api'
 import appState from './appState'
 import servers from './servers'
 import members from './members'
-import messages from './messages'
 
-export default combineReducers({ api, appState, servers, members, messages })
+export default combineReducers({ api, appState, servers, members })

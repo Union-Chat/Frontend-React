@@ -14,3 +14,7 @@ export const updateMemberPresence = (member: string, presence: boolean) => ({
   type: 'MEMBER_PRESENCE',
   member, presence
 })
+
+export const purgeMembers = () => ({
+  type: 'MEMBER_PURGE'
+})

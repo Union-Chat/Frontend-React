@@ -1,9 +1,10 @@
+import ChatWebSocket from '../websocket/chat'
+
 export default interface UnionStore {
   api?: UnionStoreAPI
   appState: UnionStoreAppState
   servers: UnionStoreServer[]
   members: UnionStoreMember[]
-  messages: UnionStoreMessage[]
 }
 
 export interface UnionStoreAPI {
@@ -18,7 +19,10 @@ export interface UnionStoreAPI {
 }
 
 export interface UnionStoreAppState {
-  connectionLost: boolean
+  connectionHealth: boolean
+  hello: boolean
+  websocket: ChatWebSocket
+  username?: string
   token?: string
 }
 
@@ -28,7 +32,7 @@ export interface UnionStoreServer {
   owner: string
   icon: string
   members: string[]
-  messages: string[]
+  messages: UnionStoreMessage[]
 }
 
 export interface UnionStoreMember {
@@ -41,6 +45,12 @@ export interface UnionStoreMessage {
   author: string
   content: string
   createdAt: number
+}
+
+export interface UnionStoreOrganizedMessages {
+  id: string // React key
+  author: UnionStoreMember
+  messages: UnionStoreMessage[]
 }
 
 export interface ReduxAction {

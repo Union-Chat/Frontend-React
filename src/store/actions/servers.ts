@@ -1,4 +1,4 @@
-import { UnionStoreServer } from '../store.interface'
+import { UnionStoreMessage, UnionStoreServer } from '../store.interface'
 
 export const addServer = (server: UnionStoreServer) => ({
   type: 'SERVER_ADD',
@@ -25,8 +25,11 @@ export const removeServerMember = (server: number, member: string) => ({
   server, member
 })
 
-export const addServerMessage = (server: number, message: string) => ({
+export const addServerMessage = (server: number, message: UnionStoreMessage) => ({
   type: 'SERVER_MESSAGE_ADD',
   server, message
 })
 
+export const purgeServers = () => ({
+  type: 'SERVER_PURGE'
+})

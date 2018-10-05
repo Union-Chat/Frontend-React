@@ -1,18 +1,22 @@
 import { UnionStoreAPI } from '../store.interface'
+import ChatWebSocket from '../../websocket/chat'
+import { setToken, setWebSocket } from './appState'
 
 export const fetchApiInfos = () => {
   return async (dispatch: any) => {
     console.log('%c[union:API]', 'color: #257dd4', 'Retrieving API infos')
     const req = await fetch('/api/info')
     if (req.ok) {
-      dispatch(setApiInfos(await req.json()))
+      const data: UnionStoreAPI = await req.json()
+
+      dispatch(setWebSocket(new ChatWebSocket('wss://' + window.location.hostname + ':' + data.websocket, dispatch)))
+      dispatch(setToken(localStorage.getItem('token')))
+      dispatch(setApiInfos(data))
     } else {
       console.error('%c[union:API]', 'color: #257dd4', `Failed to load API infos (Status ${req.status})`)
     }
   }
 }
-
-// --
 
 export const setApiInfos = (infos: UnionStoreAPI) => ({
   type: 'API_INFO',

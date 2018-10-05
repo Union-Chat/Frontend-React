@@ -9,7 +9,7 @@ import { fetchApiInfos } from './store/actions/api'
 import AsyncComponent from './components/AsyncComponent'
 import Crash from './components/Crash'
 
-import './favicon.png'
+import './polyfills'
 
 const App = () => import('./components/App')
 const store = createStore()
@@ -26,7 +26,7 @@ render(
 
 let crashed = false
 ;(global as any).crashApp = (message: string, error: Error) => {
-  // @todo: Report errors to sentry
+  // @todo: Report errors to sentry,
   if (!crashed) {
     render(
       <Crash message={message} error={error}/>,
@@ -34,4 +34,3 @@ let crashed = false
     )
   }
 }
-

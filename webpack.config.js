@@ -83,7 +83,7 @@ let config = {
         use: [{
           loader: 'file-loader',
           options: {
-            name: `${dev ? '[name].[hash:4]' : '[hash]'}.[ext]`
+            name: '[name].[hash:8].[ext]'
           }
         }]
       }
@@ -91,9 +91,7 @@ let config = {
   },
   devServer: {
     quiet: true,
-    historyApiFallback: {
-      index: 'dist/index.html'
-    },
+    historyApiFallback: true,
     proxy: {
       '/api': 'http://localhost:3010' // I run Union API on this port
     }
@@ -102,7 +100,7 @@ let config = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: 'body',
-      filename: 'index.html',
+      filename: '../index.html',
       alwaysWriteToDisk: true
     }),
     new HtmlWebpackHarddiskPlugin(),

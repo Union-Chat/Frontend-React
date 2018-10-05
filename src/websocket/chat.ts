@@ -1,4 +1,7 @@
 import { hello, memberAdd, memberLeave, messageCreate, presence, serverJoin, serverLeave } from './chat.handler'
+import { setConnectionHealth, setHello, setLoginToken } from '../store/actions/appState'
+import { purgeServers } from '../store/actions/servers'
+import { purgeMembers } from '../store/actions/members'
 
 export default class ChatWebSocket {
 
@@ -20,9 +23,18 @@ export default class ChatWebSocket {
     this.ws.addEventListener('close', (c) => this.handleDisconnect(c))
   }
 
+  disconnect () {
+    if (this.ws) {
+      console.log('%c[union:websocket]', 'color: #257dd4', 'Closing connection to the server')
+      this.ws.close()
+      this.ws = null
+    }
+  }
+
   private authenticate () {
     console.log('%c[union:websocket]', 'color: #257dd4', 'Connected to the server, authenticating')
     this.ws.send('Basic ' + localStorage.getItem('token'))
+    this.dispatcher(setHello(false))
   }
 
   private handleMessage (message: { op: number, d: any }) {
@@ -59,16 +71,18 @@ export default class ChatWebSocket {
 
   private handleDisconnect (close: CloseEvent) {
     console.log('%c[union:websocket]', 'color: #257dd4', `Disconnected from server: ${close.code} ${close.reason} (Was clean: ${close.wasClean})`)
-    // Dispatch connection lost to store
+    this.dispatcher(setConnectionHealth(false))
 
     if (close.code !== 4001) {
       // @todo: Exponential backoff
       console.log('%c[union:websocket]', 'color: #257dd4', 'Trying to reconnect in 5s')
       setTimeout(() => this.connect(), 5e3)
     } else {
-      // Connection ok
-      // Clear server & all related things
-      // Clear token
+      window.localStorage.removeItem('token')
+      this.dispatcher(setConnectionHealth(true))
+      this.dispatcher(purgeServers())
+      this.dispatcher(purgeMembers())
+      this.dispatcher(setLoginToken(null))
     }
   }
 }

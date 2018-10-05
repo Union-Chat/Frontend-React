@@ -1,4 +1,5 @@
 @import './vars.scss';
+@import '~rc-tooltip/assets/bootstrap.css';
 
 * { box-sizing: border-box; }
 
@@ -44,4 +45,31 @@ button {
   border: none;
   text-align: center;
   width: 100%;
+}
+
+.rc-tooltip {
+  opacity: 1;
+  font-size: 14px;
+
+  &-inner {
+    background-color: lighten(#000, 3);
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(lighten(#000, 3), 0.3);
+  }
+
+  &-placement-top &-arrow, &-placement-topLeft &-arrow, &-placement-topRight &-arrow {
+    border-top-color: lighten(#000, 3);
+  }
+
+  &-placement-right &-arrow, &-placement-rightTop &-arrow, &-placement-rightBottom &-arrow {
+    border-right-color: lighten(#000, 3);
+  }
+
+  &-placement-left &-arrow, &-placement-leftTop &-arrow, &-placement-leftBottom &-arrow {
+    border-left-color: lighten(#000, 3);
+  }
+
+  &-placement-bottom &-arrow, &-placement-bottomLeft &-arrow, &-placement-bottomRight &-arrow {
+    border-bottom-color: lighten(#000, 3);
+  }
 }

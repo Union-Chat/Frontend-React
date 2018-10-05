@@ -14,7 +14,7 @@ export default ({ message, error }) => {
         <div className='crash-window-contents-error'>{error.message}</div>
       </div>
       <div className='crash-window-footer'>
-        <a href='https://github.com/Union-Chat'>Open an issue on GitHub</a> -
+        <a href='https://github.com/Union-Chat'>Open an issue on GitHub</a>
         <a href='#' onClick={() => window.location.reload()}>Reload Union</a>
       </div>
     </div>

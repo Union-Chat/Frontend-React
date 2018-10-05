@@ -2,13 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { hot } from 'react-hot-loader'
 
-import UnionStore from '../../../store/store.interface'
-import { login } from '../../../store/actions/appState'
+import UnionStore from '../../store/store.interface'
+import { setToken } from '../../store/actions/appState'
 
 import './style.scss'
 
 interface IProps {
-  login: (token: string) => void
+  setToken: (token: string) => void
   usernameMaxLength: number
 }
 
@@ -32,11 +32,11 @@ class Login extends React.Component<IProps, IState> {
       <h1 className='login-title'>Login to Union</h1>
       <div className='login-form'>
         <input type='text' name='username' value={this.state.username} maxLength={this.props.usernameMaxLength}
-               onChange={(e) => this.setState({ username: e.target.value })}/>
-        <input type='password' name='password' value={this.state.password}
-               onChange={(e) => this.setState({ password: e.target.value })}/>
+               onChange={(e) => this.setState({ username: e.target.value })} placeholder='Username'/>
+        <input type='password' name='password' value={this.state.password} minLength={4}
+               onChange={(e) => this.setState({ password: e.target.value })} placeholder='Password'/>
         <div className='login-form-buttons'>
-          <button onClick={() => this.props.login(btoa(`${this.state.username}:${this.state.password}`))}>Login</button>
+          <button onClick={() => this.props.setToken(btoa(`${this.state.username}:${this.state.password}`))}>Login</button>
           <button onClick={() => this.register()}>Sign up</button>
         </div>
       </div>
@@ -74,7 +74,7 @@ const mapStateToProps = (store: UnionStore) => ({
 })
 
 const mapDispatchToProps = (dispatch: any) => ({
-  login: (token: string) => dispatch(login(token))
+  setToken: (token: string) => dispatch(setToken(token))
 })
 
 export default hot(module)(connect(
