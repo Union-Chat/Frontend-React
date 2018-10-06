@@ -5,6 +5,8 @@ import {
 } from '../store/actions/servers'
 import { addMember, addMemberBatch, purgeMembers, updateMemberPresence } from '../store/actions/members'
 import { setConnectionHealth, setHello } from '../store/actions/appState'
+import UnionStore from '../store/store.interface'
+import Parser from '../components/Server/formatter'
 
 export const hello = (data: SocketServer[], dispatch: any) => {
   let servers = []
@@ -43,7 +45,20 @@ export const memberAdd = (data: SocketMemberAdd, dispatch: any) => {
   dispatch(addServerMember(data.server, data.member.id))
 }
 
-export const messageCreate = (data: SocketMessage, dispatch: any) => {
+export const messageCreate = (data: SocketMessage, dispatch: any, getState: any) => {
+  const user = (getState() as UnionStore).appState.username
+  if (Parser.isMention(data.content, user)) {
+    // @todo: Notification sound
+    const notif = new Notification(`${data.author} mentioned you!`, {
+      body: data.content.replace(Parser.mention, '@$1')
+    })
+
+    notif.onclick = () => {
+      window.focus()
+      notif.close()
+    }
+  }
+
   dispatch(addServerMessage(data.server, {
     id: data.id,
     author: data.author,

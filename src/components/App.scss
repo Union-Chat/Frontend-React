@@ -47,6 +47,15 @@ button {
   width: 100%;
 }
 
+a, a:hover, a:visited {
+  color: $blue;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .rc-tooltip {
   opacity: 1;
   font-size: 14px;

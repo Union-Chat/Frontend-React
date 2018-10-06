@@ -124,7 +124,7 @@
       padding: 15px 20px;
       border-bottom: 1px lighten($dark4, 10) solid;
 
-      &:nth-last-child {
+      &:last-of-type {
         border-color: transparent;
       }
 
@@ -148,6 +148,38 @@
             margin-left: 10px;
             opacity: .6;
             font-size: 14px;
+          }
+        }
+      }
+
+      &-contents {
+        margin-top: 2px;
+        margin-bottom: 2px;
+        flex: 1;
+
+        code {
+          font-family: 'Inconsolata', monospace;
+          background-color: $dark1;
+          border-radius: 10px;
+          margin-top: 5px;
+          margin-bottom: 5px;
+          display: block;
+          white-space: pre-wrap;
+          border: 1px $dark0 solid;
+          padding: 7px;
+
+          &.simple {
+            display: inline;
+            padding: 3px;
+            border-radius: 5px;
+          }
+
+          &.mention {
+            display: inline;
+            padding: 3px;
+            border-radius: 0;
+            border-color: transparent;
+            color: $blue;
           }
         }
       }

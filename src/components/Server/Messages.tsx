@@ -1,7 +1,9 @@
 import React from 'react'
 import Scrollbars from 'react-custom-scrollbars'
-import { UnionStoreMember, UnionStoreMessage, UnionStoreOrganizedMessages } from '../../store/store.interface'
 import { hot } from 'react-hot-loader'
+
+import Parser from './formatter'
+import { UnionStoreMember, UnionStoreMessage, UnionStoreOrganizedMessages } from '../../store/store.interface'
 
 interface IProps {
   members: UnionStoreMember[]
@@ -9,6 +11,20 @@ interface IProps {
 }
 
 class Messages extends React.Component<IProps> {
+
+  scrollbarRef: React.RefObject<Scrollbars> = React.createRef()
+
+  componentDidMount () {
+    this.scrollbarRef.current.scrollToBottom()
+  }
+
+  componentDidUpdate (prevProps: IProps) {
+    if (!this.props.messages.equal(prevProps.messages)) {
+      if (this.scrollbarRef.current.getScrollHeight() - this.scrollbarRef.current.getScrollTop() - this.scrollbarRef.current.getClientHeight() < 40) {
+        this.scrollbarRef.current.scrollToBottom()
+      }
+    }
+  }
 
   render () {
     const messages: UnionStoreOrganizedMessages[] = []
@@ -25,7 +41,7 @@ class Messages extends React.Component<IProps> {
     })
 
     return <div className='server-chat-messages'>
-      <Scrollbars>
+      <Scrollbars ref={this.scrollbarRef}>
         {messages.reverse().map(messages => <div className='server-chat-message' key={messages.id}>
           <img className='server-chat-message-avatar' src={require('../../img/default_avatar.png')}/>
           <div className='server-chat-message-contents'>
@@ -33,9 +49,9 @@ class Messages extends React.Component<IProps> {
               <span>{messages.author.name}</span>
               <span>{this.formatDate(new Date(messages.messages[0].createdAt))}</span>
             </div>
-            {messages.messages.map(message => <div className='server-chat-message-contents' key={message.id}>
-              {message.content}
-            </div>)}
+            {messages.messages.map(message =>
+              <div className='server-chat-message-contents' key={message.id}
+                   dangerouslySetInnerHTML={{ __html: Parser.parseMarkdown(message.content) }}/>)}
           </div>
         </div>)}
       </Scrollbars>

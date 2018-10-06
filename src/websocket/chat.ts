@@ -8,9 +8,11 @@ export default class ChatWebSocket {
   ws: WebSocket
   address: string
   dispatcher: any
+  getState: any
 
-  constructor (address: string, dispatch: any) {
+  constructor (address: string, dispatch: any, getState: any) {
     this.dispatcher = dispatch
+    this.getState = getState
     this.address = address
   }
 
@@ -47,7 +49,7 @@ export default class ChatWebSocket {
         memberAdd(message.d, this.dispatcher)
         break
       case InOpCodes.MESSAGE:
-        messageCreate(message.d, this.dispatcher)
+        messageCreate(message.d, this.dispatcher, this.getState)
         break
       case InOpCodes.PRESENCE_UPDATE:
         presence(message.d, this.dispatcher)

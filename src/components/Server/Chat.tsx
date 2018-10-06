@@ -35,6 +35,12 @@ class Chat extends React.Component<IProps, IState> {
     }
   }
 
+  componentDidMount () {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+  }
+
   render () {
     return <div className='server-chat'>
       <Messages messages={this.props.server.messages} members={this.props.members}/>
@@ -45,8 +51,8 @@ class Chat extends React.Component<IProps, IState> {
         </div>}
         {/* Maybe file upload? */}
         <textarea placeholder={'Message ' + this.props.server.name} style={{ height: this.state.textAreaHeight }}
-                  value={this.state.message} onChange={(e) => this.handleChange(e)} disabled={this.state.sending}
-                  maxLength={this.props.messageLimit} rows={1} onKeyPress={(e) => this.handleKey(e)}/>
+                  value={this.state.message} onChange={(e) => this.handleChange(e)} rows={1}
+                  maxLength={this.props.messageLimit} onKeyPress={(e) => this.handleKey(e)}/>
         {/* Emoji menu coming soon */}
       </div>
     </div>
@@ -64,7 +70,10 @@ class Chat extends React.Component<IProps, IState> {
   }
 
   async sendMessage () {
-    this.setState({ sending: true })
+    if (this.state.message === '') return
+    const content = this.state.message
+
+    this.setState({ sending: true, message: '', textAreaHeight: 40 })
     const req = await fetch('/api/server/' + this.props.server.id + '/messages', {
       method: 'POST',
       headers: {
@@ -72,15 +81,13 @@ class Chat extends React.Component<IProps, IState> {
         Authorization: 'Basic ' + localStorage.getItem('token')
       },
       body: JSON.stringify({
-        content: this.state.message
+        content
       })
     })
     if (req.status !== 200) {
       alert('An error occurred: ' + (await req.json()).error)
-      this.setState({ sending: false })
-      return
     }
-    this.setState({ message: '', textAreaHeight: 40, sending: false })
+    this.setState({ sending: false })
   }
 }
 

@@ -3,13 +3,13 @@ import ChatWebSocket from '../../websocket/chat'
 import { setToken, setWebSocket } from './appState'
 
 export const fetchApiInfos = () => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
     console.log('%c[union:API]', 'color: #257dd4', 'Retrieving API infos')
     const req = await fetch('/api/info')
     if (req.ok) {
       const data: UnionStoreAPI = await req.json()
 
-      dispatch(setWebSocket(new ChatWebSocket('wss://' + window.location.hostname + ':' + data.websocket, dispatch)))
+      dispatch(setWebSocket(new ChatWebSocket('wss://' + window.location.hostname + ':' + data.websocket, dispatch, getState)))
       dispatch(setToken(localStorage.getItem('token')))
       dispatch(setApiInfos(data))
     } else {
