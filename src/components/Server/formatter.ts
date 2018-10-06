@@ -11,7 +11,7 @@ export default class Parser {
     [/([*_])(.*?)\1/g, '<i>$2</i>'],                                         // Italic
     [/(~~)(.*?)\1/g, '<del>$2</del>'],                                       // Strikethrough
     [/(`{3}([a-z]+)\n)(.*?)(\n`{3})/g, '<code class="syntax-$2">$3</code>'], // Blockcode w/ syntax (coming soon)
-    [/(`{3})\n?([^`]*)\1/g, '<code>$2</clode>'],                                  // Blockcode
+    [/(`{3})\n?([^`]*)\1/g, '<code>$2</clode>'],                             // Blockcode
     [/(`)(.*?)\1/g, '<code class="simple">$2</code>'],                       // Code
     [Parser.mention, '<code class="mention">@$1</code>']                     // Mention
   ]
@@ -30,7 +30,7 @@ export default class Parser {
 
         const imageMatch = URL.match(this.img)
         if (imageMatch) {
-          text += `<br><img src="${imageMatch[0]}" class="embed" onload="scrollToBottom()"'>`
+          text += `<br><img src="${imageMatch[0]}" class="embed"'>`
         }
       }
     }

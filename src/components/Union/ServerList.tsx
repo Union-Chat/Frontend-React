@@ -42,7 +42,7 @@ class Servers extends React.Component<IProps, IState> {
       )}
       {this.props.servers.length < this.props.maxServers && <div className='union-servers-create'>
         {this.state.displayCreate ? <img src={require('../../img/add.svg')}/>
-          : <Tooltip placement='right' overlay='Create a new server' mouseLeaveDelay={0}>
+          : <Tooltip placement='right' overlay='Create or join a server' mouseLeaveDelay={0}>
             <img src={require('../../img/add.svg')} onClick={() => this.popup()}/>
           </Tooltip>}
         {this.state.displayCreate && <div className='union-servers-create-select'>

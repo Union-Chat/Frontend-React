@@ -10,6 +10,7 @@ import Route from './Route'
 
 const Login = () => import('./Login')
 const Home = () => import('./Union')
+const Invite = () => import('./Invite')
 
 import './App.scss'
 
@@ -26,6 +27,7 @@ class App extends React.Component<IProps> {
     return <Switch>
       <ReactRoute path='/' render={() => <Redirect to={this.props.token ? '/servers' : '/login'}/>} exact/>
       <Route path='/login' component={() => <AsyncComponent moduleProvider={Login}/>} allowed={!this.props.token}/>
+      <Route path='/i/:code([a-zA-Z0-9\-_]+)' component={() => <AsyncComponent moduleProvider={Invite}/>} allowed={this.props.token}/>
       <Route path='/servers' component={() => <AsyncComponent moduleProvider={Home}/>} allowed={this.props.token}/>
     </Switch>
   }
