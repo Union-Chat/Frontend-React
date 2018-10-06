@@ -1,15 +1,16 @@
 import { SocketMemberAdd, SocketMemberLeave, SocketMessage, SocketPresence, SocketServer } from './chat.interface'
 import {
+  ackServerMessage,
   addServer, addServerBatch, addServerMember, addServerMessage, deleteServer, purgeServers,
-  removeServerMember
+  removeServerMember, serverPoke
 } from '../store/actions/servers'
 import { addMember, addMemberBatch, purgeMembers, updateMemberPresence } from '../store/actions/members'
 import { setConnectionHealth, setHello } from '../store/actions/appState'
-import UnionStore from '../store/store.interface'
+import UnionStore, { UnionStoreServer } from '../store/store.interface'
 import Parser from '../components/Server/formatter'
 
 export const hello = (data: SocketServer[], dispatch: any) => {
-  let servers = []
+  let servers: UnionStoreServer[] = []
   let members = []
   data.forEach(server => {
     let serverMembers = []
@@ -25,7 +26,9 @@ export const hello = (data: SocketServer[], dispatch: any) => {
       owner: server.owner,
       icon: server.iconUrl,
       members: serverMembers,
-      messages: []
+      messages: [],
+      mentions: 0,
+      lastRead: ''
     })
   })
 
@@ -48,6 +51,8 @@ export const memberAdd = (data: SocketMemberAdd, dispatch: any) => {
 export const messageCreate = (data: SocketMessage, dispatch: any, getState: any) => {
   const user = (getState() as UnionStore).appState.username
   if (Parser.isMention(data.content, user)) {
+    dispatch(serverPoke(data.server))
+
     // @todo: Notification sound
     const notif = new Notification(`${data.author} mentioned you!`, {
       body: data.content.replace(Parser.mention, '@$1')
@@ -80,7 +85,9 @@ export const serverJoin = (data: SocketServer, dispatch: any) => {
     owner: data.owner,
     icon: data.iconUrl,
     members: data.members.map(member => member.id),
-    messages: []
+    messages: [],
+    mentions: 0,
+    lastRead: ''
   }))
   dispatch(addMemberBatch(members))
 }

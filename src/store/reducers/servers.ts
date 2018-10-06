@@ -12,6 +12,10 @@ export default (state: UnionStoreServer[] = [], action: ReduxAction) => {
       return state.map(server => server.id === action.server ? Object.assign({}, server, { members: server.members.filter(member => member !== action.member)}) : server)
     case 'SERVER_MESSAGE_ADD':
       return state.map(server => server.id === action.server ? Object.assign({}, server, { messages: [action.message, ...server.messages]}) : server)
+    case 'SERVER_MESSAGE_ACK':
+      return state.map(server => server.id === action.server ? Object.assign({}, server, { lastRead: server.messages[0] ? server.messages[0].id : '', mentions: 0}) : server)
+    case 'SERVER_POKE':
+      return state.map(server => server.id === action.server ? Object.assign({}, server, { mentions: server.mentions + 1}) : server)
     case 'SERVER_DELETE':
       return state.filter(server => server.id !== action.server)
     case 'SERVER_PURGE':

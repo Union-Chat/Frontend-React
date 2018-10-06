@@ -30,6 +30,16 @@ export const addServerMessage = (server: number, message: UnionStoreMessage) => 
   server, message
 })
 
+export const ackServerMessage = (server: number) => ({
+  type: 'SERVER_MESSAGE_ACK',
+  server
+})
+
+export const serverPoke = (server: number) => ({
+  type: 'SERVER_POKE',
+  server
+})
+
 export const purgeServers = () => ({
   type: 'SERVER_PURGE'
 })

@@ -33,6 +33,8 @@ export interface UnionStoreServer {
   icon: string
   members: string[]
   messages: UnionStoreMessage[]
+  mentions: number
+  lastRead: string
 }
 
 export interface UnionStoreMember {

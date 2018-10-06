@@ -35,6 +35,9 @@ class Servers extends React.Component<IProps, IState> {
           <Tooltip placement='right' overlay={server.name} mouseLeaveDelay={0}>
             <img src={server.icon} alt={server.name + ' icon'}/>
           </Tooltip>
+          {server.mentions > 0 && <span className='poke'>{server.mentions}</span>}
+          {(server.mentions === 0 && server.messages[0] && server.messages[0].id !== server.lastRead) &&
+          <span className='unread'/>}
         </NavLink>
       )}
       {this.props.servers.length < this.props.maxServers && <div className='union-servers-create'>

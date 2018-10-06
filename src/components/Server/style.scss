@@ -155,7 +155,9 @@
       &-contents {
         margin-top: 2px;
         margin-bottom: 2px;
+        overflow: hidden;
         flex: 1;
+        overflow-wrap: break-word;
 
         code {
           font-family: 'Inconsolata', monospace;

@@ -6,6 +6,8 @@ import Parser from './formatter'
 import { UnionStoreMember, UnionStoreMessage, UnionStoreOrganizedMessages } from '../../store/store.interface'
 
 interface IProps {
+  ackServerMessages: () => void
+  unread: boolean
   members: UnionStoreMember[]
   messages: UnionStoreMessage[]
 }
@@ -16,12 +18,14 @@ class Messages extends React.Component<IProps> {
 
   componentDidMount () {
     this.scrollbarRef.current.scrollToBottom()
+    this.props.ackServerMessages()
   }
 
   componentDidUpdate (prevProps: IProps) {
     if (!this.props.messages.equal(prevProps.messages)) {
       if (this.scrollbarRef.current.getScrollHeight() - this.scrollbarRef.current.getScrollTop() - this.scrollbarRef.current.getClientHeight() < 40) {
         this.scrollbarRef.current.scrollToBottom()
+        this.props.ackServerMessages()
       }
     }
   }
@@ -41,7 +45,7 @@ class Messages extends React.Component<IProps> {
     })
 
     return <div className='server-chat-messages'>
-      <Scrollbars ref={this.scrollbarRef}>
+      <Scrollbars ref={this.scrollbarRef} onScroll={() => this.ackOnScroll()}>
         {messages.reverse().map(messages => <div className='server-chat-message' key={messages.id}>
           <img className='server-chat-message-avatar' src={require('../../img/default_avatar.png')}/>
           <div className='server-chat-message-contents'>
@@ -58,6 +62,14 @@ class Messages extends React.Component<IProps> {
     </div>
   }
 
+  ackOnScroll () {
+    if (this.props.unread) {
+      if (this.scrollbarRef.current.getScrollHeight() - this.scrollbarRef.current.getScrollTop() - this.scrollbarRef.current.getClientHeight() < 10) {
+        this.props.ackServerMessages()
+      }
+    }
+  }
+
   formatDate (d) {
     if (new Date().getDate() === d.getDate()) {
       return `Today at ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`
@@ -68,4 +80,4 @@ class Messages extends React.Component<IProps> {
 
 }
 
-export default hot(module)(Messages as any)
+export default hot(module)(Messages)

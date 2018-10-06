@@ -11,8 +11,11 @@ import UnionStore, {
 
 import './style.scss'
 import Messages from './Messages'
+import { setToken } from '../../store/actions/appState'
+import { ackServerMessage } from '../../store/actions/servers'
 
 interface IProps {
+  ackServerMessages: () => void
   server: UnionStoreServer
   messageLimit: number
   members: UnionStoreMember[]
@@ -43,7 +46,9 @@ class Chat extends React.Component<IProps, IState> {
 
   render () {
     return <div className='server-chat'>
-      <Messages messages={this.props.server.messages} members={this.props.members}/>
+      <Messages messages={this.props.server.messages} members={this.props.members}
+                ackServerMessages={this.props.ackServerMessages}
+                unread={this.props.server.lastRead !== (this.props.server.messages[0] ? this.props.server.messages[0].id : '')}/>
 
       <div className='server-chat-text'>
         {this.state.sending && <div className='server-chat-text-sending'>
@@ -97,4 +102,8 @@ const mapStateToProps = (store: UnionStore) => ({
   servers: store.servers
 })
 
-export default hot(module)(connect(mapStateToProps)(Chat as any)) as any
+const mapDispatchToProps = (dispatch: any, ownProps: IProps) => ({
+  ackServerMessages: () => dispatch(ackServerMessage(ownProps.server.id))
+})
+
+export default hot(module)(connect(mapStateToProps, mapDispatchToProps)(Chat as any)) as any
