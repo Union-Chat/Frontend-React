@@ -1,0 +1,72 @@
+@import '../vars';
+
+.crash {
+  &-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(#000, .6);
+    z-index: 6666;
+  }
+
+  &-window {
+    position: absolute;
+    z-index: 6667;
+    padding: 10px 15px;
+    align-items: center;
+    height: 230px;
+    width: 650px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+    background-color: $dark1;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    display: flex;
+
+    &-svg {
+      width: 170px;
+      height: 170px;
+    }
+
+    &-contents {
+      width: calc(100% - 170px);
+      &-title {
+        font-size: 26px;
+        padding-bottom: 15px;
+        font-weight: bold;
+      }
+
+      &-message {
+        padding-bottom: 10px;
+        font-size: 20px;
+      }
+
+      &-error {
+        background-color: $dark0;
+        font-family: monospace;
+        font-size: 16px;
+      }
+    }
+
+    &-footer {
+      height: 40px;
+      line-height: 30px;
+      display: flex;
+
+      a {
+        margin-left: 10px;
+        margin-right: 10px;
+        color: #fff;
+        display: block;
+        text-decoration: none;
+        height: 30px;
+        padding: 0 15px;
+        font-size: 14px;
+        background-color: #292d32;
+      }
+    }
+  }
+}

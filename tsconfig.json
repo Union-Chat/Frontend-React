@@ -1,0 +1,16 @@
+{
+  "include": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
+    "lib": ["es2015", "dom"]
+  },
+  "exclude": ["node_modules"]
+}
