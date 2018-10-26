@@ -49,7 +49,7 @@ class Home extends React.Component<IProps> {
 }
 
 const mapStateToProps = (store: UnionStore) => ({
-  username: store.appState.username,
+  username: store.appState.self.username,
   hello: store.appState.hello
 })
 

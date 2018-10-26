@@ -1,4 +1,6 @@
 // @todo: Emojis - const emojiRegex = /:\w+:/g
+import { UnionStoreMember } from '../../store/store.interface'
+
 export default class Parser {
 
   static url = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm
@@ -13,11 +15,16 @@ export default class Parser {
     [/(`{3}([a-z]+)\n)(.*?)(\n`{3})/g, '<code class="syntax-$2">$3</code>'], // Blockcode w/ syntax (coming soon)
     [/(`{3})\n?([^`]*)\1/g, '<code>$2</clode>'],                             // Blockcode
     [/(`)(.*?)\1/g, '<code class="simple">$2</code>'],                       // Code
-    [Parser.mention, '<code class="mention">@$1</code>']                     // Mention
+    // [Parser.mention, '<code class="mention">@$1</code>']                     // Mention
   ]
 
-  static parseMarkdown (text: string): string {
+  static parseMarkdown (text: string, users: UnionStoreMember[]): string {
     Parser.rules.forEach(rule => text = text.replace(rule[0], rule[1]))
+    if (Parser.mention.exec(text)) {
+      let user = Parser.mention.exec(text)[1]
+      users.forEach(u => { if (u.id === user) user = u.username })
+      text.replace(Parser.mention, `'<code class="mention">${user}</code>'`)
+    }
     text = text.replace(/\\([*_~`])/g, '$1')
     return Parser.parseLinks(text)
   }

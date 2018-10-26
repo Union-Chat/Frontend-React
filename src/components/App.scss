@@ -56,6 +56,16 @@ a:hover {
   text-decoration: underline;
 }
 
+.app-incompatible {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
 .rc-tooltip {
   opacity: 1;
   font-size: 14px;

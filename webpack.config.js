@@ -93,7 +93,7 @@ let config = {
     quiet: true,
     historyApiFallback: true,
     proxy: {
-      '/api': 'http://localhost:3010' // I run Union API on this port
+      '/api': 'http://localhost:80'
     }
   },
   plugins: [

@@ -9,6 +9,7 @@ import UnionSvg from '../UnionSvg'
 
 interface IProps {
   maxServers: number
+  userId: string
   servers: UnionStoreServer[]
 }
 
@@ -40,7 +41,8 @@ class Servers extends React.Component<IProps, IState> {
           <span className='unread'/>}
         </NavLink>
       )}
-      {this.props.servers.length < this.props.maxServers && <div className='union-servers-create'>
+      {this.props.servers.filter(s => s.owner === this.props.userId).length < this.props.maxServers &&
+      <div className='union-servers-create'>
         {this.state.displayCreate ? <img src={require('../../img/add.svg')}/>
           : <Tooltip placement='right' overlay='Create or join a server' mouseLeaveDelay={0}>
             <img src={require('../../img/add.svg')} onClick={() => this.popup()}/>
@@ -57,7 +59,7 @@ class Servers extends React.Component<IProps, IState> {
         </div>}
       </div>}
       <div className='union-servers-logo'>
-        <Tooltip placement='right' overlay='UnionChat v1.0.0' mouseLeaveDelay={0} mouseEnterDelay={2}>
+        <Tooltip placement='right' overlay='UnionChat v2.0.0' mouseLeaveDelay={0} mouseEnterDelay={2}>
           <div>
             <UnionSvg className='union-servers-logo' fill='#fff'/>
           </div>
@@ -80,7 +82,7 @@ class Servers extends React.Component<IProps, IState> {
     if (!serverName) return
     const iconUrl = prompt('Please enter server icon url', require('../../img/default_server.png'))
 
-    await fetch('/api/server', {
+    await fetch('/api/v2/servers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -98,7 +100,7 @@ class Servers extends React.Component<IProps, IState> {
     if (!invite) return
 
     if (invite.includes('/i/')) invite = invite.split('/i/')[1]
-    await fetch('/api/invites/' + invite, {
+    await fetch('/api/v2/invites/' + invite, {
       method: 'POST',
       headers: {
         Authorization: 'Basic ' + localStorage.getItem('token')
@@ -108,8 +110,9 @@ class Servers extends React.Component<IProps, IState> {
 }
 
 const mapStateToProps = (store: UnionStore) => ({
-  maxServers: store.api.app_settings.max_servers,
-  servers: store.servers
+  maxServers: store.api.appSettings.maxServersPerUser,
+  servers: store.servers,
+  userId: store.appState.self.id
 })
 
 export default hot(module)(connect(mapStateToProps)(Servers as any))

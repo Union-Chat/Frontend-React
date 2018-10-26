@@ -6,19 +6,15 @@ import {
 } from '../store/actions/servers'
 import { addMember, addMemberBatch, purgeMembers, updateMemberPresence } from '../store/actions/members'
 import { setConnectionHealth, setHello } from '../store/actions/appState'
-import UnionStore, { UnionStoreServer } from '../store/store.interface'
+import UnionStore, { UnionStoreMember, UnionStoreServer } from '../store/store.interface'
 import Parser from '../components/Server/formatter'
 
 export const hello = (data: SocketServer[], dispatch: any) => {
   let servers: UnionStoreServer[] = []
-  let members = []
+  let members: UnionStoreMember[] = []
   data.forEach(server => {
-    let serverMembers = []
-
-    server.members.forEach(member => {
-      members.push({ name: member.id, online: member.online })
-      serverMembers.push(member.id)
-    })
+    let serverMembers = server.members.map(member => member.id)
+    members.push(...server.members)
 
     servers.push({
       id: server.id,
@@ -41,15 +37,12 @@ export const hello = (data: SocketServer[], dispatch: any) => {
 }
 
 export const memberAdd = (data: SocketMemberAdd, dispatch: any) => {
-  dispatch(addMember({
-    name: data.member.id,
-    online: data.member.online
-  }))
+  dispatch(addMember(data.member))
   dispatch(addServerMember(data.server, data.member.id))
 }
 
 export const messageCreate = (data: SocketMessage, dispatch: any, getState: any) => {
-  const user = (getState() as UnionStore).appState.username
+  const user = (getState() as UnionStore).appState.self.id
   if (Parser.isMention(data.content, user)) {
     dispatch(serverPoke(data.server))
 
@@ -73,12 +66,10 @@ export const messageCreate = (data: SocketMessage, dispatch: any, getState: any)
 }
 
 export const presence = (data: SocketPresence, dispatch: any) => {
-  dispatch(updateMemberPresence(data.id, data.status))
+  dispatch(updateMemberPresence(data.id, data.state))
 }
 
 export const serverJoin = (data: SocketServer, dispatch: any) => {
-  let members = data.members.map(member => ({ name: member.id, online: member.online }))
-
   dispatch(addServer({
     id: data.id,
     name: data.name,
@@ -89,7 +80,7 @@ export const serverJoin = (data: SocketServer, dispatch: any) => {
     mentions: 0,
     lastRead: ''
   }))
-  dispatch(addMemberBatch(members))
+  dispatch(addMemberBatch(data.members))
 }
 
 export const serverLeave = (data: number, dispatch: any) => {

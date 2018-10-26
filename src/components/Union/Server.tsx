@@ -14,7 +14,7 @@ interface IProps {
   }
   servers: UnionStoreServer[]
   connectionHealth: boolean
-  username: string
+  userId: string
 }
 
 interface IState {
@@ -31,7 +31,7 @@ class Server extends React.Component<IProps, IState> {
   }
 
   shouldComponentUpdate (nextProps: IProps) {
-    if (this.props.username !== nextProps.username) return true
+    if (this.props.userId !== nextProps.userId) return true
     if (this.props.connectionHealth !== nextProps.connectionHealth) return true
     const server = this.props.servers.filter(server => server.id === this.state.server)[0]
     const nextServer = nextProps.servers.filter(server => server.id === this.state.server)[0]
@@ -44,7 +44,7 @@ class Server extends React.Component<IProps, IState> {
 
     return <div className='server'>
       <div className='server-inner'>
-        <ServerHeader server={server} username={this.props.username} connectionHealth={this.props.connectionHealth}/>
+        <ServerHeader server={server} userId={this.props.userId} connectionHealth={this.props.connectionHealth}/>
         <ServerChat server={server}/>
       </div>
       <ServerMembers serverMembers={server.members}/>
@@ -56,7 +56,7 @@ class Server extends React.Component<IProps, IState> {
 const mapStateToProps = (store: UnionStore) => ({
   servers: store.servers,
   connectionHealth: store.appState.connectionHealth,
-  username: store.appState.username
+  userId: store.appState.self.id
 })
 
 export default hot(module)(

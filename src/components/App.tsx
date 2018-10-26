@@ -23,6 +23,10 @@ class App extends React.Component<IProps> {
 
   render () {
     if (!this.props.api) return <Loader/>
+    if (this.props.api.apiVersion !== 2) return <div className='app-incompatible'>
+      <img src='https://cdn.discordapp.com/emojis/400064206310998035.png'/>
+      <p>Union API is incompatible with this version of union-react</p>
+    </div>
 
     return <Switch>
       <ReactRoute path='/' render={() => <Redirect to={this.props.token ? '/servers' : '/login'}/>} exact/>

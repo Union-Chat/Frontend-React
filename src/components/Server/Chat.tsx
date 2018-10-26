@@ -40,7 +40,7 @@ class Chat extends React.Component<IProps, IState> {
 
   componentDidMount () {
     if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission()
+      Notification.requestPermission().catch()
     }
   }
 
@@ -79,7 +79,7 @@ class Chat extends React.Component<IProps, IState> {
     const content = this.state.message
 
     this.setState({ sending: true, message: '', textAreaHeight: 40 })
-    const req = await fetch('/api/server/' + this.props.server.id + '/messages', {
+    const req = await fetch('/api/v2/servers/' + this.props.server.id + '/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ class Chat extends React.Component<IProps, IState> {
         content
       })
     })
-    if (req.status !== 200) {
+    if (req.status !== 204) {
       alert('An error occurred: ' + (await req.json()).error)
     }
     this.setState({ sending: false })
@@ -98,7 +98,7 @@ class Chat extends React.Component<IProps, IState> {
 
 const mapStateToProps = (store: UnionStore) => ({
   members: store.members,
-  messageLimit: store.api.app_settings.max_message_characters,
+  messageLimit: store.api.appSettings.messageCharacterLimit,
   servers: store.servers
 })
 

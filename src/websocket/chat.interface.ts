@@ -9,7 +9,9 @@ export interface SocketServer {
 
 export interface SocketMember {
   id: string
-  createdAt: number
+  username: string
+  discriminator: number
+  avatarUrl?: string
   online: boolean
 }
 
@@ -28,7 +30,7 @@ export interface SocketMessage {
 
 export interface SocketPresence {
   id: string
-  status: boolean
+  state: boolean
 }
 
 export interface SocketMemberLeave {
