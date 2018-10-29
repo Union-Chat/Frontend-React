@@ -20,7 +20,6 @@ export default class ChatWebSocket {
     console.log('%c[union:websocket]', 'color: #257dd4', 'Connecting to server')
     this.ws = new WebSocket(this.address)
 
-    this.ws.addEventListener('open', () => this.authenticate())
     this.ws.addEventListener('message', (m) => this.handleMessage(JSON.parse(m.data)))
     this.ws.addEventListener('close', (c) => this.handleDisconnect(c))
   }
@@ -35,39 +34,56 @@ export default class ChatWebSocket {
 
   private authenticate () {
     console.log('%c[union:websocket]', 'color: #257dd4', 'Connected to the server, authenticating')
-    this.ws.send('Basic ' + localStorage.getItem('token'))
+    this.ws.send(JSON.stringify({ op: OutOpCodes.AUTHENTICATE, d: 'Basic ' + localStorage.getItem('token') }))
     this.dispatcher(setHello(false))
   }
 
-  private handleMessage (message: { op: number, d: any }) {
+  private handleMessage (message: { op: number, d: any, e: any }) {
     console.log('%c[union:websocket]', 'color: #257dd4', 'Message received', message)
     switch (message.op) {
+      case InOpCodes.WELCOME:
+        this.authenticate()
+        break
       case InOpCodes.HELLO:
         hello(message.d, this.dispatcher)
         break
-      case InOpCodes.MEMBER_ADD:
-        memberAdd(message.d, this.dispatcher)
-        break
-      case InOpCodes.MESSAGE:
-        messageCreate(message.d, this.dispatcher, this.getState)
-        break
-      case InOpCodes.PRESENCE_UPDATE:
-        presence(message.d, this.dispatcher)
-        break
-      case InOpCodes.SERVER_JOIN:
-        serverJoin(message.d, this.dispatcher)
-        break
-      case InOpCodes.SERVER_LEAVE:
-        serverLeave(message.d, this.dispatcher)
-        break
-      case InOpCodes.MEMBER_CHUNK:
-      case InOpCodes.DELETE_MESSAGE:
-        break
-      case InOpCodes.MEMBER_LEAVE:
-        memberLeave(message.d, this.dispatcher)
+      case InOpCodes.DISPATCH_EVENT:
+        this.handleEvent(message)
         break
       default:
         console.warn('%c[union:websocket]', 'color: #257dd4', 'Received an invalid message!', message)
+    }
+  }
+
+  private handleEvent (message: { op: number, d: any, e: any }) {
+    switch (message.e) {
+      // User events
+      case 'PRESENCE_UPDATE':
+        presence(message.d, this.dispatcher)
+        break
+
+      // Server events
+      case 'SERVER_CREATE':
+        serverJoin(message.d, this.dispatcher)
+        break
+      case 'SERVER_DELETE':
+        serverLeave(message.d, this.dispatcher)
+        break
+
+      // Member events
+      case 'SERVER_MEMBER_JOIN':
+        memberAdd(message.d, this.dispatcher)
+        break
+      case 'SERVER_MEMBER_LEAVE':
+        memberLeave(message.d, this.dispatcher)
+        break
+
+      // Message events
+      case 'MESSAGE_CREATE':
+        messageCreate(message.d, this.dispatcher, this.getState)
+        break
+      default:
+        console.warn('%c[union:websocket]', 'color: #257dd4', 'Received an invalid event!', message)
     }
   }
 
@@ -90,17 +106,14 @@ export default class ChatWebSocket {
 }
 
 export const InOpCodes = {
-  HELLO: 1,
-  MEMBER_ADD: 2,
-  MESSAGE: 3,
-  PRESENCE_UPDATE: 4,
-  SERVER_JOIN: 5,
-  SERVER_LEAVE: 6,
-  MEMBER_CHUNK: 7,
-  DELETE_MESSAGE: 8,
-  MEMBER_LEAVE: 10
+  OK: -1,
+  DISPATCH_EVENT: 0,
+  WELCOME: 1,
+  HELLO: 3
 }
 
 export const OutOpCodes = {
-  REQUEST_MEMBER_CHUNK: 9
+  AUTHENTICATE: 2,
+  SUBSCRIBE: 4,
+  UNSUBSCRIBE: 5
 }

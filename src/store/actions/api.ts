@@ -9,7 +9,7 @@ export const fetchApiInfos = () => {
     if (req.ok) {
       const data: UnionStoreAPI = await req.json()
 
-      dispatch(setWebSocket(new ChatWebSocket('wss://' + window.location.hostname + ':' + data.websocket, dispatch, getState)))
+      dispatch(setWebSocket(new ChatWebSocket(window.location.protocol.replace('http', 'ws') + '//' + window.location.hostname + ':' + data.websocket, dispatch, getState)))
       dispatch(setToken(localStorage.getItem('token')))
       dispatch(setApiInfos(data))
     } else {

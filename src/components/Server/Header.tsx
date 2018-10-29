@@ -6,7 +6,7 @@ import Loader from '../Loader'
 import { deleteServer } from '../../store/actions/servers'
 
 interface IProps {
-  username: string
+  userId: string
   connectionHealth: boolean
   server: UnionStoreServer
 }
@@ -26,7 +26,7 @@ class Header extends React.Component<IProps, IState> {
   }
 
   render () {
-    const owner = this.props.server.owner === this.props.username
+    const owner = this.props.server.owner === this.props.userId
     return <div className='server-header'>
       <div className='server-header-name'>
         {this.props.server.name}
@@ -65,7 +65,7 @@ class Header extends React.Component<IProps, IState> {
 
   async getInviteCode () {
     this.setState({ gettingInvite: true })
-    const req = await fetch('/api/server/' + this.props.server.id + '/invite', {
+    const req = await fetch('/api/v2/servers/' + this.props.server.id + '/invites', {
       method: 'POST',
       headers: {
         Authorization: 'Basic ' + localStorage.getItem('token')
@@ -78,7 +78,7 @@ class Header extends React.Component<IProps, IState> {
 
   async leave () {
     if (confirm('Are you sure? You\'ll not be able to re-join the server unless you\'re invited')) {
-      await fetch('/api/self/server/' + this.props.server.id, {
+      await fetch('/api/v2/servers/' + this.props.server.id + '/leave', {
         method: 'DELETE',
         headers: {
           Authorization: 'Basic ' + localStorage.getItem('token')
@@ -89,7 +89,7 @@ class Header extends React.Component<IProps, IState> {
 
   async deleteServer () {
     if (confirm('Are you sure? This action is irreversible')) {
-      await fetch('/api/server/' + this.props.server.id, {
+      await fetch('/api/v2/servers/' + this.props.server.id, {
         method: 'DELETE',
         headers: {
           Authorization: 'Basic ' + localStorage.getItem('token')

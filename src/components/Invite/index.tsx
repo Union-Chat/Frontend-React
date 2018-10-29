@@ -2,8 +2,6 @@ import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Redirect, withRouter } from 'react-router'
 import Loader from '../Loader'
-import UnionSvg from '../UnionSvg'
-import { Link } from 'react-router-dom'
 
 interface IProps {
   location: {
@@ -27,7 +25,7 @@ class Invite extends React.Component<IProps, IState> {
   }
 
   async componentDidMount () {
-    await fetch('/api/invites/' + this.state.code, {
+    await fetch('/api/v2/invites/' + this.state.code, {
       method: 'POST',
       headers: {
         Authorization: 'Basic ' + localStorage.getItem('token')

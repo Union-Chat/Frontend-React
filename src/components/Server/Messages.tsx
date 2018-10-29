@@ -33,12 +33,12 @@ class Messages extends React.Component<IProps> {
   render () {
     const messages: UnionStoreOrganizedMessages[] = []
     this.props.messages.forEach(message => {
-      if (messages.length !== 0 && messages[messages.length - 1].author.name === message.author) {
+      if (messages.length !== 0 && messages[messages.length - 1].author.id === message.author) {
         messages[messages.length - 1].messages.unshift(message)
       } else {
         messages.push({
           id: 'block-' + message.id,
-          author: this.props.members.filter(member => member.name === message.author)[0],
+          author: this.props.members.filter(member => member.id === message.author)[0],
           messages: [message]
         })
       }
@@ -50,12 +50,12 @@ class Messages extends React.Component<IProps> {
           <img className='server-chat-message-avatar' src={require('../../img/default_avatar.png')}/>
           <div className='server-chat-message-contents'>
             <div className='server-chat-message-meta'>
-              <span>{messages.author.name}</span>
+              <span>{messages.author.username}</span>
               <span>{this.formatDate(new Date(messages.messages[0].createdAt))}</span>
             </div>
             {messages.messages.map(message =>
               <div className='server-chat-message-contents' key={message.id}
-                   dangerouslySetInnerHTML={{ __html: Parser.parseMarkdown(message.content) }}/>)}
+                   dangerouslySetInnerHTML={{ __html: Parser.parseMarkdown(message.content, this.props.members) }}/>)}
           </div>
         </div>)}
       </Scrollbars>

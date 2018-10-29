@@ -8,13 +8,19 @@ export default interface UnionStore {
 }
 
 export interface UnionStoreAPI {
-  api_version: number,
+  apiVersion: number,
   websocket: number,
   voice: number,
-  app_settings: {
-    max_servers: number,
-    max_message_characters: number,
-    max_username_characters: number
+  appSettings: {
+    messageCharacterLimit: number,
+    usernameCharacterLimit: number,
+    serverCharacterLimit: number
+    maxServersPerUser: number
+    maxAppsPerUser: number
+  },
+  recaptcha: {
+    enabled: boolean,
+    key?: string
   }
 }
 
@@ -22,7 +28,7 @@ export interface UnionStoreAppState {
   connectionHealth: boolean
   hello: boolean
   websocket: ChatWebSocket
-  username?: string
+  self?: UnionStoreMember
   token?: string
 }
 
@@ -38,7 +44,10 @@ export interface UnionStoreServer {
 }
 
 export interface UnionStoreMember {
-  name: string
+  id: string
+  username: string
+  discriminator: number
+  avatarUrl?: string
   online: boolean
 }
 

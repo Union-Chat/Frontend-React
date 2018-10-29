@@ -7,13 +7,23 @@
   top: 50%;
   left: 50%;
   background-color: $dark3;
-  width: 300px;
-  height: 300px;
+  width: 310px;
+  height: 310px;
   box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.20);
   transform: translateX(-50%) translateY(-50%);
 
   &-title {
     margin-bottom: 35px;
+    text-align: center;
+  }
+
+  .new {
+    color: #2ecc71;
+    text-align: center;
+  }
+
+  .error {
+    color: #e74c3c;
     text-align: center;
   }
 
@@ -30,5 +40,11 @@
     button {
       width: 48%;
     }
+  }
+
+  #g-recaptcha {
+    position: relative;
+    left: -21px;
+    top: 15px;
   }
 }
