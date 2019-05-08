@@ -1,0 +1,13 @@
+# Jetbrains
+.idea
+
+# node
+node_modules
+*.log
+
+# webpack
+dist
+/index.html
+
+# temp stuff
+_work

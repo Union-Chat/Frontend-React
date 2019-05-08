@@ -1,0 +1,9 @@
+{
+  "name": "union-react",
+  "version": "0.2.0",
+  "description": "Frontend for Union-Chat, built with React and Redux",
+  "main": "src/main.jsx",
+  "repository": "https://github.com/Union-Chat/union-react",
+  "author": "Bowser65 <contact.bowser65@gmail.com>",
+  "license": "MIT"
+}
