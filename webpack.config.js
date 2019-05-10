@@ -12,6 +12,20 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const dev = process.env.NODE_ENV !== 'production';
 
+let buildCfg = {
+  api: {
+    path: '/api',
+    staging: '/stg/api'
+  }
+};
+
+try {
+  buildCfg = {
+    ...buildCfg,
+    ...require('./build.json')
+  };
+} catch(_) {}
+
 // Extract text
 const extractCss = new ExtractTextPlugin({
   filename: '[hash].css',
@@ -57,10 +71,7 @@ const config = {
           use: [{
             loader: 'css-loader',
             options: {
-              sourceMap: dev,
-              modules: true,
-              camelCase: true,
-              localIdentName: '[local]-[hash:7]'
+              sourceMap: dev
             }
           }, {
             loader: 'postcss-loader',
@@ -82,10 +93,7 @@ const config = {
           use: [{
             loader: 'css-loader',
             options: {
-              sourceMap: dev,
-              modules: true,
-              camelCase: true,
-              localIdentName: '[local]-[hash:7]'
+              sourceMap: dev
             }
           }, {
             loader: 'postcss-loader',
@@ -135,7 +143,8 @@ const config = {
     new webpack.DefinePlugin({
       WEBPACK: {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        GIT_REVISION: JSON.stringify(commitHash)
+        GIT_REVISION: JSON.stringify(commitHash),
+        CFG: buildCfg
       },
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV === 'staging' ? 'production' : process.env.NODE_ENV)
     })

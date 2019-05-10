@@ -1,0 +1,66 @@
+@import "../vars";
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #react-root, #app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: $darkSecondary;
+  font-family: Roboto, 'sans-serif';
+  font-size: 1em;
+  color: #e4e4e4;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: 'Acme', sans-serif;
+}
+
+h2 {
+  font-size: 38px;
+}
+
+h3 {
+  font-size: 32px;
+}
+
+h4 {
+  font-size: 26px;
+}
+
+a {
+  color: $blue;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.app {
+  width: 100%;
+  height: calc(100% - 81px);
+  display: flex;
+}
+
+.wrapper {
+  width: calc(100% - 315px);
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 30px 3%;
+  display: flex;
+  flex-direction: column;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 15px;
+  }
+}

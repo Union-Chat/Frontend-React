@@ -1,11 +1,11 @@
 import React from 'react';
 
-// import App from './App'
+import App from './App';
 import Tooltip from 'rc-tooltip';
 
 // import { Provider } from 'react-redux'
 import { createBrowserHistory } from 'history';
-// import { ConnectedRouter } from 'connected-react-router'
+import { ConnectedRouter } from 'connected-react-router';
 
 // import store from '../store'
 
@@ -42,12 +42,11 @@ export default class Root extends React.PureComponent {
   }
 
   render () {
-    return 'memes tbh';
-    // return <Provider store={this.state.store}>
-    //   <ConnectedRouter history={this.state.history}>
-    //     <App/>
-    //   </ConnectedRouter>
-    // </Provider>
+    // <Provider store={this.state.store}>
+    // <ConnectedRouter history={this.state.history}>
+    return <App/>;
+    // </ConnectedRouter>;
+    // </Provider>;
   }
 
   _getConfirmation (message, callback) {
