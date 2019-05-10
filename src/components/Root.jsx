@@ -3,11 +3,11 @@ import React from 'react';
 import App from './App';
 import Tooltip from 'rc-tooltip';
 
-// import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
 
-// import store from '../store'
+import store from '../store';
 
 import '../tooltip.scss';
 import '../hljs.scss';
@@ -31,7 +31,7 @@ export default class Root extends React.PureComponent {
 
     this.state = {
       history,
-      // store: store(history),
+      store: store(history),
       confirmLeave: false,
       confirmCallback: null
     };
@@ -42,11 +42,11 @@ export default class Root extends React.PureComponent {
   }
 
   render () {
-    // <Provider store={this.state.store}>
-    // <ConnectedRouter history={this.state.history}>
-    return <App/>;
-    // </ConnectedRouter>;
-    // </Provider>;
+    return <Provider store={this.state.store}>
+      <ConnectedRouter history={this.state.history}>
+        <App/>
+      </ConnectedRouter>
+    </Provider>;
   }
 
   _getConfirmation (message, callback) {
